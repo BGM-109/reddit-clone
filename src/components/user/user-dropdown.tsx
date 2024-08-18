@@ -46,7 +46,7 @@ const UserDropdown = ({ userProfile }: UserDropdownProps) => {
       <DropdownMenuContent>
         {menus.map((menu, index) => (
           <DropdownMenuItem key={index}>
-            <Link href={menu}>{menu.text}</Link>
+            <Link href={menu.href}>{menu.text}</Link>
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
