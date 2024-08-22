@@ -6,6 +6,11 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 
+export type UpdateRedditParams = {
+  description: string;
+  subId: string;
+};
+
 export async function createCommunity({
   name,
   description,
@@ -40,6 +45,40 @@ export async function createCommunity({
         };
       }
     }
+    return {
+      status: 400,
+      message: "Internal server error",
+    };
+  }
+}
+
+export async function updateCommunity({
+  description,
+  subId,
+}: UpdateRedditParams): Promise<ActionResult> {
+  const { getUser } = getKindeServerSession();
+
+  const user = await getUser();
+
+  if (!user || user === null || !user.id) {
+    return redirect("/api/auth/login");
+  }
+
+  try {
+    await prisma.subreddit.update({
+      where: {
+        id: subId,
+      },
+      data: {
+        description,
+      },
+    });
+
+    return {
+      status: 200,
+      message: "Community updated successfully",
+    };
+  } catch (e) {
     return {
       status: 400,
       message: "Internal server error",
