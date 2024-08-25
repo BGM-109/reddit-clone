@@ -21,7 +21,7 @@ const UserDropdown = ({ userProfile }: UserDropdownProps) => {
       text: "Create community",
     },
     {
-      href: "/create",
+      href: "/r/crossfit/post",
       text: "Create post",
     },
     {

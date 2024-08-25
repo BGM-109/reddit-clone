@@ -3,16 +3,19 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import prisma from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { format } from "date-fns";
+import { CakeIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 async function getSubReddit(name: string) {
   const data = await prisma.subreddit.findUnique({
@@ -42,6 +45,10 @@ export default async function RedditPage({ params }: PageProps) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   const isAuthor = user?.id === data?.userId;
+  const isLogged = !!user;
+  const createPostUrl = isLogged
+    ? `/r/${data?.name}/create`
+    : "/api/auth/login";
 
   if (!data) {
     return redirect("/");
@@ -63,7 +70,7 @@ export default async function RedditPage({ params }: PageProps) {
               help each other.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 flex flex-col">
             <div className="flex items-center gap-x-4">
               <Image
                 src={`https://avatar.vercel.sh/janmarshal`}
@@ -83,6 +90,29 @@ export default async function RedditPage({ params }: PageProps) {
             ) : (
               <p>{data?.description ?? "-"}</p>
             )}
+
+            <div className="flex items-center gap-x-2 mt-2">
+              <CakeIcon className="text-mute-foregroun h-5 w-5" />
+              <p className="text-muted-foreground font-medium text-sm">
+                Created: {/* Example Wendsday , Mar , dd, yyyy */}
+                {format(new Date(data?.createdAt), "PPPP")}
+              </p>
+            </div>
+
+            <Separator className="my-4" />
+
+            <Link
+              href={createPostUrl}
+              className={cn(
+                "",
+                buttonVariants({
+                  variant: "default",
+                  className: "rounded-full w-fit self-end",
+                })
+              )}
+            >
+              Create Post
+            </Link>
           </CardContent>
         </Card>
       </div>
