@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./theme/mode-toggle";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import UserDropdown from "./user/user-dropdown";
+import UserDropdown from "./user-dropdown";
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();

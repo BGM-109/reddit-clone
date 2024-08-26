@@ -24,6 +24,7 @@ export const redditPostSchema = z.object({
       message: "Title must be at most 21 characters.",
     }),
   content: z.string(),
+  imageUrl: z.string().optional(),
 });
 
 export type redditPostType = z.infer<typeof redditPostSchema>;

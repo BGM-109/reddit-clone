@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useTransition } from "react";
-import { updateUsername } from "@/actions/update-username";
+import { updateUsername } from "@/actions/user";
 import { usernameFormSchema, usernameFormType } from "@/infra/user";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";

@@ -9,6 +9,7 @@ import {
 import { MenuIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import Image from "next/image";
 
 type UserDropdownProps = {
   userProfile: string | null;
@@ -34,10 +35,12 @@ const UserDropdown = ({ userProfile }: UserDropdownProps) => {
       <DropdownMenuTrigger className="flex gap-x-4 border rounded-full py-2 px-5 items-center">
         <MenuIcon size={24} />
         {userProfile ? (
-          <img
+          <Image
             src={userProfile}
             alt="User profile"
             className="w-8 h-8 rounded-full"
+            width={32}
+            height={32}
           />
         ) : (
           <UserIcon className="w-8 h-8" />

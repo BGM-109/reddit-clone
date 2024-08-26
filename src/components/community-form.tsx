@@ -72,7 +72,7 @@ export default function CommunityForm({}: CommunityFormProps) {
             <FormItem>
               <FormLabel className="text-lg capitalize">name</FormLabel>
               <FormDescription>
-                Community name must be unique and can't be changed later.
+                Community name must be unique and cant be changed later.
               </FormDescription>
               <FormControl>
                 <div className="relative">
@@ -97,7 +97,7 @@ export default function CommunityForm({}: CommunityFormProps) {
             <FormItem>
               <FormLabel className="text-lg">Description</FormLabel>
               <FormDescription>
-                Description will help others to understand your community.
+                This is how new members come to understand your community.
               </FormDescription>
               <FormControl>
                 <Input placeholder="Enter description here" {...field} />

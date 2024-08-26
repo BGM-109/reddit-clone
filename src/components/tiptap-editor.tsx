@@ -64,14 +64,22 @@ export function Menubar({ editor }: { editor: Editor | null }) {
   );
 }
 
-export function TiptapEditor() {
+type TiptapEditorProps = {
+  json: string;
+  setJson: (json: string) => void;
+};
+export function TiptapEditor({ json, setJson }: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: `<p>Hey, I'm a paragraph!</p>`,
+    content: json ?? `<p>Hey, I'm a paragraph!</p>`,
     editorProps: {
       attributes: {
         class: "prose ",
       },
+    },
+    onUpdate: ({ editor }) => {
+      const json = editor.getJSON();
+      setJson(JSON.stringify(json, null, 2));
     },
   });
   return (
