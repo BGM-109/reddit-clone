@@ -4,7 +4,8 @@ import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import CopyLink from "@/components/copy-link";
 
 interface IPostCardProps extends PostModel {
   userName: string;
@@ -66,11 +67,11 @@ const PostCard = ({
           <div className="flex items-center gap-x-1">
             <MessageCircle className="h-4 w-4 text-muted-foreground" />
             <p className="text-muted-foreground font-medium text-xs">
-              {/* {commentAmount} Comments */}
+              31 Comments
             </p>
           </div>
 
-          {/* <CopyLink id={id} /> */}
+          <CopyLink id={id} />
         </div>
       </div>
     </Card>

@@ -55,11 +55,11 @@ export default async function RedditPage({ params }: PageProps) {
   }
   return (
     <div className="max-w-7xl mx-auto flex gap-x-10 mt-4">
-      <div className="w-3/5">
+      <div className="w-3/4">
         <h1>This is post section</h1>
       </div>
 
-      <div className="w-2/5">
+      <div className="w-1/4">
         <Card>
           <CardHeader className="p-0">
             <CardTitle className="bg-muted p-4 font-semibold m-0">
@@ -107,7 +107,7 @@ export default async function RedditPage({ params }: PageProps) {
                 "",
                 buttonVariants({
                   variant: "default",
-                  className: "rounded-full w-fit self-end",
+                  className: "rounded-full w-full",
                 })
               )}
             >

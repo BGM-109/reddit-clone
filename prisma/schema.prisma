@@ -1,74 +1,62 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id String @id
-  email String @unique
-  firstName String
-  lastName String
-  imageUrl String?
-  userName String @unique
-  createdAt DateTime @default(now())
+  id                String      @id
+  createdAt         DateTime    @default(now())
+  email             String      @unique
+  firstName         String
+  imageUrl          String?
+  lastName          String
+  userName          String      @unique
+  posts             Post[]
   createdSubreddits Subreddit[]
-  posts Post[]
-  Vote Vote[]
+  Vote              Vote[]
 }
 
 model Subreddit {
-  id String @id @default(uuid())
-  name String @unique
+  id          String   @id @default(uuid())
+  name        String   @unique
   description String?
-  imageUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User User @relation(fields: [userId], references: [id])
-  userId String
-
-  posts Post[]
-
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  posts       Post[]
+  User        User     @relation(fields: [userId], references: [id])
 }
 
 model Post {
-  id String @id @default(uuid())
-  title String
-  content Json?
-  imageUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Vote Vote[]
-
+  id        String     @id @default(uuid())
+  title     String
+  content   Json?
+  imageUrl  String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  subName   String?
+  userId    String?
   Subreddit Subreddit? @relation(fields: [subName], references: [name])
-  subName String?
-  User User? @relation(fields: [userId], references: [id])
-  userId String?
+  User      User?      @relation(fields: [userId], references: [id])
+  Vote      Vote[]
+}
+
+model Vote {
+  id       String     @id @default(uuid())
+  postId   String?
+  userId   String?
+  voteType TypeOfVote
+  Post     Post?      @relation(fields: [postId], references: [id])
+  User     User?      @relation(fields: [userId], references: [id])
 }
 
 enum TypeOfVote {
   UP
   DOWN
-}
-
-model Vote {
-  id String @id @default(uuid())
-
-  Post   Post?   @relation(fields: [postId], references: [id])
-  postId String?
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
-
-  voteType TypeOfVote
 }

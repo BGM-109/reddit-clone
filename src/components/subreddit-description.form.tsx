@@ -84,7 +84,7 @@ const SubredditDescriptionForm = ({
         <Button
           type="submit"
           disabled={isPending || !form.formState.isDirty}
-          className="self-end"
+          className=""
         >
           {isPending ? (
             <>
