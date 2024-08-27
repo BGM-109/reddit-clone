@@ -1,3 +1,4 @@
+"use client";
 import { PostModel } from "@/data/post-repository";
 import React from "react";
 import { Card } from "@/components/ui/card";
@@ -6,9 +7,11 @@ import Image from "next/image";
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CopyLink from "@/components/copy-link";
+import { handleVote } from "@/actions/vote";
 
 interface IPostCardProps extends PostModel {
   userName: string;
+  voteCount: number;
 }
 
 const PostCard = ({
@@ -18,16 +21,29 @@ const PostCard = ({
   subName,
   title,
   userName,
+  voteCount,
 }: IPostCardProps) => {
+  function handleVoteButton(type: "UP" | "DOWN") {
+    if (!id) return;
+    handleVote({ pid: id, voteType: type });
+  }
+
   return (
     <Card className="flex relative overflow-hidden">
       <div className="flex flex-col items-center gap-y-2 bg-muted p-2">
-        <Button variant={"outline"} size={"sm"}>
+        <Button
+          variant={"outline"}
+          size={"sm"}
+          onClick={() => handleVoteButton("UP")}
+        >
           <ArrowUp className="w-4 h-4 " />
         </Button>
-
-        {0}
-        <Button variant={"outline"} size={"sm"}>
+        {voteCount}
+        <Button
+          variant={"outline"}
+          size={"sm"}
+          onClick={() => handleVoteButton("DOWN")}
+        >
           <ArrowDown className="w-4 h-4" />
         </Button>
       </div>

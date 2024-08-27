@@ -25,37 +25,43 @@ export async function createPost({
   if (!user) {
     return redirect("/api/auth/login");
   }
-
-  try {
-    const data = await repository.create({
-      title,
-      content: jsonContent,
-      imageUrl,
-      userId: user.id,
-      subName,
-    });
-
-    return redirect(`/post/${data.id}`);
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === "P2002") {
-        return {
-          status: 400,
-          message: "Post already exists",
-        };
-      }
-      if (e.code === "P2003") {
-        return {
-          status: 400,
-          message: "User not found",
-        };
-      }
-    }
-    return {
-      status: 400,
-      message: "Internal server error",
-    };
-  }
+  const data = await repository.create({
+    title,
+    content: jsonContent,
+    imageUrl,
+    userId: user.id,
+    subName,
+  });
+  return redirect(`/post/${data.id}`);
+  // try {
+  //   const data = await repository.create({
+  //     title,
+  //     content: jsonContent,
+  //     imageUrl,
+  //     userId: user.id,
+  //     subName,
+  //   });
+  //   return redirect(`/post/${data.id}`);
+  // } catch (e) {
+  //   if (e instanceof Prisma.PrismaClientKnownRequestError) {
+  //     if (e.code === "P2002") {
+  //       return {
+  //         status: 400,
+  //         message: "Post already exists",
+  //       };
+  //     }
+  //     if (e.code === "P2003") {
+  //       return {
+  //         status: 400,
+  //         message: "User not found",
+  //       };
+  //     }
+  //   }
+  //   return {
+  //     status: 400,
+  //     message: "Internal server error",
+  //   };
+  // }
 }
 
 export async function getPostById({ id }: { id: string }) {
@@ -80,8 +86,32 @@ export async function getPostById({ id }: { id: string }) {
 
 export async function getPosts() {
   try {
-    const posts = await repository.findAll();
-    return posts;
+    const data = await prisma.post.findMany({
+      select: {
+        title: true,
+        createdAt: true,
+        content: true,
+        id: true,
+        imageUrl: true,
+        User: {
+          select: {
+            userName: true,
+          },
+        },
+        subName: true,
+        Vote: {
+          select: {
+            userId: true,
+            voteType: true,
+            postId: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return { data };
   } catch (e) {
     return {
       status: 400,

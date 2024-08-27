@@ -2,65 +2,38 @@ import { getPosts } from "@/actions/post";
 import DefaultLayout from "@/components/layout/default-layout";
 import PostCard from "@/components/post-card";
 import { Card } from "@/components/ui/card";
-import { PostModel } from "@/data/post-repository";
-import prisma from "@/lib/db";
-import { unstable_noStore } from "next/cache";
 import Image from "next/image";
 import HelloImage from "../../public/hero-image.png";
 import Banner from "../../public/banner.png";
 import { Separator } from "@/components/ui/separator";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import CreatePostCard from "@/components/create-post-card";
-
-async function getData() {
-  const data = await prisma.post.findMany({
-    select: {
-      title: true,
-      createdAt: true,
-      content: true,
-      id: true,
-      imageUrl: true,
-
-      User: {
-        select: {
-          userName: true,
-        },
-      },
-      subName: true,
-      Vote: {
-        select: {
-          userId: true,
-          voteType: true,
-          postId: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return { data };
-}
 
 type PageParams = {
   searchParam: string;
 };
 
 export default async function Home() {
-  const posts = await getData();
+  const posts = await getPosts();
   return (
     <DefaultLayout>
       <div className="w-3/4 space-y-4">
         <CreatePostCard />
         {posts &&
+          posts.data &&
           posts.data.map((post, index) => (
             <PostCard
               key={index}
               {...post}
               content={post.content?.toString() ?? ""}
               userName={post.User?.userName ?? "Anonymous"}
+              voteCount={post.Vote.reduce((acc, vote) => {
+                if (vote.voteType === "UP") return acc + 1;
+                if (vote.voteType === "DOWN") return acc - 1;
+                return acc;
+              }, 0)}
             />
           ))}
       </div>
