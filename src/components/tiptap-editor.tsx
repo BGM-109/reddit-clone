@@ -98,6 +98,7 @@ export function TiptapEditor({ json, setJson }: TiptapEditorProps) {
           "rounded-md border min-h-[150px] border-input bg-background focus:ring-offset-2 disabled:cursor-not-allows disabled:opacity-50 p-2",
       },
     },
+    immediatelyRender: true,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
       console.log(json);

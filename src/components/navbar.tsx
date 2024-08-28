@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./theme/mode-toggle";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import UserDropdown from "./user-dropdown";
+import TextLogo from "../../public/reddit-text.png";
+import RedditMobileLogo from "../../public/reddit-logo.png";
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
@@ -17,17 +19,14 @@ export async function Navbar() {
     <nav className="h-[10vh] w-full flex justify-between items-center border-b px-5 lg:px-14">
       <Link href="/" className="flex flex-row items-center justify-center">
         <Image
-          src="/reddit-logo.png"
-          alt="Reddit logo"
-          width={100}
-          height={100}
+          src={RedditMobileLogo}
+          alt="Reddit mobile icon"
+          className="h-20 w-fit"
         />
         <Image
-          src="/reddit-text.png"
+          src={TextLogo}
           alt="Reddit text"
-          className="hidden md:block"
-          width={100}
-          height={100}
+          className="h-9 w-fit hidden md:block"
         />
       </Link>
       <div className="flex space-x-4 items-center">

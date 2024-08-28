@@ -2,13 +2,15 @@ import { PrismaClient } from "@prisma/client";
 import { Repository } from "@/core/repository";
 
 export interface PostModel {
-  id?: string;
+  id: string;
   title: string;
   content?: string;
   imageUrl?: string | null;
   userId?: string | null;
   subName: string | null;
 }
+
+export type PostCreateModel = Omit<PostModel, "id">;
 
 export class PostRepository implements Repository<PostModel> {
   private prisma: PrismaClient;
@@ -17,7 +19,7 @@ export class PostRepository implements Repository<PostModel> {
     this.prisma = prisma;
   }
 
-  async create(item: PostModel): Promise<PostModel> {
+  async create(item: PostCreateModel): Promise<PostModel> {
     const createdPost = await this.prisma.post.create({
       data: {
         title: item.title,

@@ -113,6 +113,7 @@ export async function getPosts() {
     });
     return { data };
   } catch (e) {
+    console.error(e);
     return {
       status: 400,
       message: "Internal server error",
