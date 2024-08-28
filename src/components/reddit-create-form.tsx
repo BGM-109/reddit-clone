@@ -1,5 +1,5 @@
 "use client";
-import { redditPostType } from "@/infra/community";
+import { redditPostSchema, redditPostType } from "@/infra/community";
 import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -21,6 +21,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { createPost } from "@/actions/post";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { zodResolver } from "@hookform/resolvers/zod";
 const RenderCounter = () => {
   const renders = React.useRef(0);
   console.log("Render count:", ++renders.current);
@@ -50,6 +51,8 @@ const RedditCreatePostForm = () => {
   };
   const [pending, startTransition] = useTransition();
   const form = useForm<redditPostType>({
+    mode: "onChange",
+    resolver: zodResolver(redditPostSchema),
     defaultValues: {
       title: "",
       content: "",
@@ -57,27 +60,28 @@ const RedditCreatePostForm = () => {
     },
   });
   function onSubmit(values: redditPostType) {
-    startTransition(() => {
-      createPost({
-        title: values.title,
-        jsonContent: values.content,
-        imageUrl: values.imageUrl,
-        subName: subName,
-      }).then((res) => {
-        // if (res?.status === 400) {
-        //   toast({
-        //     title: "Error",
-        //     description: res?.message,
-        //     variant: "destructive",
-        //   });
-        //   return;
-        // }
-        toast({
-          title: "Success",
-          description: "Post created",
-        });
-      });
-    });
+    console.log("On submit Executed");
+    // startTransition(() => {
+    //   createPost({
+    //     title: values.title,
+    //     jsonContent: values.content,
+    //     imageUrl: values.imageUrl,
+    //     subName: subName,
+    //   }).then((res) => {
+    //     // if (res?.status === 400) {
+    //     //   toast({
+    //     //     title: "Error",
+    //     //     description: res?.message,
+    //     //     variant: "destructive",
+    //     //   });
+    //     //   return;
+    //     // }
+    //     toast({
+    //       title: "Success",
+    //       description: "Post created",
+    //     });
+    //   });
+    // });
   }
   return (
     <>

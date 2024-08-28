@@ -1,65 +1,85 @@
-"use client";
-
 import { useEditor, type Editor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Button } from "@/components/ui/button";
+import {
+  Bold,
+  Heading1,
+  Heading2,
+  Heading3,
+  Italic,
+  List,
+  ListOrdered,
+  StrikethroughIcon,
+} from "lucide-react";
+import { Toggle } from "@/components/ui/toggle";
 
 export function Menubar({ editor }: { editor: Editor | null }) {
   if (!editor) return null;
 
   return (
     <div className="flex flex-wrap gap-5">
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        variant={
-          editor.isActive("heading", { level: 1 }) ? "default" : "secondary"
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("heading")}
+        onPressedChange={() =>
+          editor.chain().focus().toggleHeading({ level: 1 }).run()
         }
       >
-        H1
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        variant={
-          editor.isActive("heading", { level: 2 }) ? "default" : "secondary"
+        <Heading1 className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("heading")}
+        onPressedChange={() =>
+          editor.chain().focus().toggleHeading({ level: 2 }).run()
         }
       >
-        H2
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        variant={
-          editor.isActive("heading", { level: 3 }) ? "default" : "secondary"
+        <Heading2 className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("heading")}
+        onPressedChange={() =>
+          editor.chain().focus().toggleHeading({ level: 3 }).run()
         }
       >
-        H3
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        variant={
-          editor.isActive("heading", { level: 4 }) ? "default" : "secondary"
-        }
+        <Heading3 className="h-4 w-4" />
+      </Toggle>
+
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("bold")}
+        onPressedChange={() => editor.chain().focus().toggleBold().run()}
       >
-        H4
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        variant={editor.isActive("bold") ? "default" : "secondary"}
+        <Bold className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("italic")}
+        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
       >
-        Bold
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        variant={editor.isActive("italic") ? "default" : "secondary"}
+        <Italic className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("strike")}
+        onPressedChange={() => editor.chain().focus().toggleStrike().run()}
       >
-        Italic
-      </Button>
-      {/* // strike */}
-      <Button
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        variant={editor.isActive("strike") ? "default" : "secondary"}
+        <StrikethroughIcon className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("bulletList")}
+        onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
       >
-        Strike
-      </Button>
+        <List className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("orderedList")}
+        onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
+      >
+        <ListOrdered className="h-4 w-4" />
+      </Toggle>
     </div>
   );
 }
@@ -74,11 +94,13 @@ export function TiptapEditor({ json, setJson }: TiptapEditorProps) {
     content: json ?? `<p>Hey, I'm a paragraph!</p>`,
     editorProps: {
       attributes: {
-        class: "prose ",
+        class:
+          "rounded-md border min-h-[150px] border-input bg-background focus:ring-offset-2 disabled:cursor-not-allows disabled:opacity-50 p-2",
       },
     },
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
+      console.log(json);
       setJson(JSON.stringify(json, null, 2));
     },
   });
@@ -87,7 +109,7 @@ export function TiptapEditor({ json, setJson }: TiptapEditorProps) {
       <Menubar editor={editor} />
       <EditorContent
         editor={editor}
-        className="rounded-lg border p-3 min-h-[150px] mt-2"
+        className="rounded-lg min-h-[150px] mt-2"
       />
     </div>
   );
