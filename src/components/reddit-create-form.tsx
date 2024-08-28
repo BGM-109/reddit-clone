@@ -31,6 +31,7 @@ const RenderCounter = () => {
 const RedditCreatePostForm = () => {
   const params = useParams();
   const subName = params.reddit as string;
+  console.log(subName);
   const { toast } = useToast();
   const tabs = ["post", "media"];
   const tabText = (tab: string) => {
@@ -60,28 +61,27 @@ const RedditCreatePostForm = () => {
     },
   });
   function onSubmit(values: redditPostType) {
-    console.log("On submit Executed");
-    // startTransition(() => {
-    //   createPost({
-    //     title: values.title,
-    //     jsonContent: values.content,
-    //     imageUrl: values.imageUrl,
-    //     subName: subName,
-    //   }).then((res) => {
-    //     // if (res?.status === 400) {
-    //     //   toast({
-    //     //     title: "Error",
-    //     //     description: res?.message,
-    //     //     variant: "destructive",
-    //     //   });
-    //     //   return;
-    //     // }
-    //     toast({
-    //       title: "Success",
-    //       description: "Post created",
-    //     });
-    //   });
-    // });
+    startTransition(() => {
+      createPost({
+        title: values.title,
+        jsonContent: values.content,
+        imageUrl: values.imageUrl,
+        subName: subName,
+      }).then((res) => {
+        // if (res?.status === 400) {
+        //   toast({
+        //     title: "Error",
+        //     description: res?.message,
+        //     variant: "destructive",
+        //   });
+        //   return;
+        // }
+        toast({
+          title: "Success",
+          description: "Post created",
+        });
+      });
+    });
   }
   return (
     <>

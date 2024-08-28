@@ -10,32 +10,42 @@ import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import CreatePostCard from "@/components/create-post-card";
+import Pagination from "@/components/pagination";
+import { Suspense } from "react";
+import { SuspenseCard } from "@/components/suspense-card";
 
 type PageParams = {
-  searchParam: string;
+  searchParams: {
+    page: string;
+  };
 };
 
-export default async function Home() {
-  const posts = await getPosts();
+export default async function Home({ searchParams }: PageParams) {
+  const page = Number(searchParams.page) || 1;
+  const size = 1;
+  const { count, data } = await getPosts({
+    page,
+    size: size,
+  });
+
   return (
     <DefaultLayout>
       <div className="w-3/4 space-y-4">
         <CreatePostCard />
-        {posts &&
-          posts.data &&
-          posts.data.map((post, index) => (
-            <PostCard
-              key={index}
-              {...post}
-              content={post.content?.toString() ?? ""}
-              userName={post.User?.userName ?? "Anonymous"}
-              voteCount={post.Vote.reduce((acc, vote) => {
-                if (vote.voteType === "UP") return acc + 1;
-                if (vote.voteType === "DOWN") return acc - 1;
-                return acc;
-              }, 0)}
-            />
-          ))}
+        <Suspense fallback={<SuspenseCard />} key={page}>
+          {data &&
+            data.map((post, index) => (
+              <PostCard
+                key={index}
+                {...post}
+                content={post.content?.toString() ?? ""}
+                userName={post.userName ?? "Anonymous"}
+                voteCount={post.voteCount ?? 0}
+              />
+            ))}
+
+          <Pagination totalPages={Math.ceil(count / size)} />
+        </Suspense>
       </div>
       <div className="w-1/4">
         <Card>
